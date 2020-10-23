@@ -1,0 +1,7 @@
+
+export HISTFILE=/home/project/.bash_history_theia
+export HISTSIZE=
+export HISTFILESIZE=
+export HISTTIMEFORMAT="%h %d %H:%M:%S "
+shopt -s histappend
+PROMPT_COMMAND="${PROMPT_COMMAND:+$PROMPT_COMMAND$'\n'}history -a; history -c; history -r"
