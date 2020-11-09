@@ -8,6 +8,15 @@ ARG LLVM=10
 ENV NODE_VERSION $NODE_VERSION
 ENV YARN_VERSION 1.13.0
 
+# default uid
+ARG host_uid=1000 
+ENV env_host_uid=$host_uid
+# default gid
+ARG host_gid=1000 
+ENV env_host_gid=$host_gid
+RUN echo $env_host_gid
+RUN echo $env_host_uid
+
 # use "latest" or "next" version for Theia packages
 ARG version=latest
 
@@ -136,8 +145,10 @@ RUN wget "https://github.com/Kitware/CMake/releases/download/v$CMAKE_VERSION/cma
 ## User account
 # https://medium.com/@nielssj/docker-volumes-and-file-system-permissions-772c1aee23ca
 
-RUN addgroup --gid 5555 theiaide
-RUN adduser --disabled-password --gecos "" --uid 5555 --ingroup theiaide theia  
+# better approach: change to this: https://stackoverflow.com/questions/44683119/dockerfile-replicate-the-host-user-uid-and-gid-to-the-image
+
+RUN addgroup --gid ${env_host_gid} theiaide
+RUN adduser --disabled-password --gecos "" --uid ${env_host_uid} --ingroup theiaide theia  
 RUN usermod -a -G theiaide theia
 # RUN useradd  -a -G theia theia
 RUN cat /etc/group | grep theia
